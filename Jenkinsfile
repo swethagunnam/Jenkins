@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "~/.local/bin/pytest"
+                sh "pytest"
                 sh "whoami"
             }
         }
