@@ -7,13 +7,13 @@ pipeline {
 
     // }
     stages {
-
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/swethagunnam/Jenkins.git', branch: 'main'
-                sh "ls -ltr"
-            }
-        }
+        //---It occurs by default
+        // stage('Checkout') {
+        //     steps {
+        //         git url: 'https://github.com/swethagunnam/Jenkins.git', branch: 'main'
+        //         sh "ls -ltr"
+        //     }
+        // }
         stage('Setup') {
             steps {
                 sh "pip3 install -r requirements.txt"
