@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Setup') {
             steps {
-                sh "pip install -r requirements.txt"
+                sh "/usr/bin/pip3 install -r requirements.txt"
             }
         }
         // stage('Test') {
