@@ -14,11 +14,11 @@ pipeline {
                 sh "ls -ltr"
             }
         }
-        stage('Setup') {
-            steps {
-                sh "/usr/bin/pip3 install -r requirements.txt"
-            }
-        }
+        // stage('Setup') {
+        //     steps {
+        //         sh "/usr/bin/pip3 install -r requirements.txt"
+        //     }
+        // }
         // stage('Test') {
         //     steps {
         //         sh "pytest"
