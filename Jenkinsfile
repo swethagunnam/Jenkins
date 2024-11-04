@@ -6,6 +6,9 @@ pipeline {
     //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     // }
+    environment {
+        SERVER_CREDS = credentials("server-creds")
+    }
     stages {
         //---It occurs by default
         // stage('Checkout') {
@@ -15,21 +18,17 @@ pipeline {
         //     }
         // }
         stage('Setup') {
-            environment {
-                DB_HOST = '168.89.09'
-                USERNAME = "Swetha"
-                PASSWORD = "Swetha@123"
-            }
             steps {
+                echo "Username & password is: ${SERVER_CREDS}"
                 sh "pip3 install -r requirements.txt"
-                echo "The database host is ${DB_HOST}"
             }
         }
         stage('Test') {
             steps {
+                echo "Username is: ${SERVER_CREDS_USR}"
+                 echo "Password is: ${SERVER_CREDS_PSW}"
                 sh "pytest"
                 sh "whoami"
-                echo "Commit is ${env.GIT_COMMIT}"
             }
         }
 
