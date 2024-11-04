@@ -25,6 +25,7 @@ pipeline {
                 sh "whoami"
             }
         }
+        
         // stage('Login to docker hub') {
         //     steps {
         //         withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
