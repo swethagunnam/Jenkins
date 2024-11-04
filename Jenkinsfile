@@ -6,6 +6,11 @@ pipeline {
     //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     // }
+    environment {
+        DB_HOST = '168.89.09'
+        USERNAME = "Swetha"
+        PASSWORD = "Swetha@123"
+    }
     stages {
         //---It occurs by default
         // stage('Checkout') {
@@ -17,15 +22,17 @@ pipeline {
         stage('Setup') {
             steps {
                 sh "pip3 install -r requirements.txt"
+                echo "The database host is ${DB_HOST}"
             }
         }
         stage('Test') {
             steps {
                 sh "pytest"
                 sh "whoami"
+                echo "The Username is ${USERNAME} and Password ${PASSWORD}"
             }
         }
-        
+
         // stage('Login to docker hub') {
         //     steps {
         //         withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
