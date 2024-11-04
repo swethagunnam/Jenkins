@@ -6,11 +6,6 @@ pipeline {
     //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     // }
-    environment {
-        DB_HOST = '168.89.09'
-        USERNAME = "Swetha"
-        PASSWORD = "Swetha@123"
-    }
     stages {
         //---It occurs by default
         // stage('Checkout') {
@@ -20,6 +15,11 @@ pipeline {
         //     }
         // }
         stage('Setup') {
+            environment {
+                DB_HOST = '168.89.09'
+                USERNAME = "Swetha"
+                PASSWORD = "Swetha@123"
+    }
             steps {
                 sh "pip3 install -r requirements.txt"
                 echo "The database host is ${DB_HOST}"
