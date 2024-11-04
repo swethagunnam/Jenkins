@@ -19,7 +19,7 @@ pipeline {
                 DB_HOST = '168.89.09'
                 USERNAME = "Swetha"
                 PASSWORD = "Swetha@123"
-    }
+            }
             steps {
                 sh "pip3 install -r requirements.txt"
                 echo "The database host is ${DB_HOST}"
@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh "pytest"
                 sh "whoami"
-                echo "The Username is ${USERNAME} and Password ${PASSWORD}"
+                echo "Commit is ${env.GIT_COMMIT}"
             }
         }
 
