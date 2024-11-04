@@ -6,9 +6,6 @@ pipeline {
     //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     // }
-    environment {
-        SERVER_CREDS = credentials("server-creds")
-    }
     stages {
         //---It occurs by default
         // stage('Checkout') {
@@ -19,14 +16,18 @@ pipeline {
         // }
         stage('Setup') {
             steps {
-                echo "Username & password is: ${SERVER_CREDS}"
+                withCredentials([usernamePasword(credentialsId:'server-creds',
+                usernameVariable:"myuser" passwordVariable:"mypassowrd",)]){
+                    sh '''
+                    echo "My username is ${myuser}
+                    echo "My password id ${mypassword}
+                    '''
+                }
                 sh "pip3 install -r requirements.txt"
             }
         }
         stage('Test') {
             steps {
-                echo "Username is: ${SERVER_CREDS_USR}"
-                 echo "Password is: ${SERVER_CREDS_PSW}"
                 sh "pytest"
                 sh "whoami"
             }
