@@ -6,6 +6,9 @@ pipeline {
     //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     // }
+    options {
+        timeout(time: 1, unit: 'MINUTES')
+    }
     stages {
         //---It occurs by default
         // stage('Checkout') {
@@ -15,17 +18,8 @@ pipeline {
         //     }
         // }
         stage('lint and format'){
-            parallel {
-                stage('linting'){
-                    steps{
-                       sh "sleep 30"
-                    }
-                }
-                stage('formatting'){
-                    steps{
-                        sh "sleep 30"
-                    }
-                }
+            steps{
+                sh "sleep 70"
             }
         }
         stage('Setup') {
