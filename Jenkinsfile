@@ -33,11 +33,11 @@ pipeline {
             }
         }
         stage('Test') {
-            when{
-                expression {
-                    params.RUN_TESTS == true
-                }
-            }
+            // when{
+            //     expression {
+            //         params.RUN_TESTS == true
+            //     }
+            // }
             steps {
                 echo "Testing application"
                 // sh "pytest"
@@ -45,8 +45,12 @@ pipeline {
             }
         }
         stage('Deploy') {
+            input {
+                message "Do you want to proceed further"
+                ok "yes"
+            }
             steps {
-                echo "Deploying to ${params.ENVIRONMENT} environment"
+                echo "Running Deployment"
             }
         }
 
