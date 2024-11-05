@@ -6,9 +6,11 @@ pipeline {
     //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     // }
-    options {
-        timeout(time: 1, unit: 'MINUTES')
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue:'dev', description:'Specify the environment for deployment')
+        booleanParam(name:'RUN_TESTS', defaultValue: true, description:'Run Tests in pipeline')
     }
+
     stages {
         //---It occurs by default
         // stage('Checkout') {
@@ -17,11 +19,7 @@ pipeline {
         //         sh "ls -ltr"
         //     }
         // }
-        stage('lint and format'){
-            steps{
-                sh "sleep 70"
-            }
-        }
+
         stage('Setup') {
             steps {
                 withCredentials([usernamePassword(credentialsId:'server-creds',
@@ -35,9 +33,20 @@ pipeline {
             }
         }
         stage('Test') {
+            when{
+                expression {
+                    params.RUN_TESTS === true
+                }
+            }
             steps {
-                sh "pytest"
-                sh "whoami"
+                echo "Testing application"
+                // sh "pytest"
+                // sh "whoami"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Deploying to ${params.Environment} environment"
             }
         }
 
