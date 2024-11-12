@@ -10,11 +10,12 @@ pipeline {
                 sh "pip3 install -r requirements.txt"
             }
         }
-        // stage('Test') {
-        //     steps {
-        //         sh "pytest"
-        //     }
-        // }
+        stage('Test') {
+            steps {
+                echo "Hai"
+                sh "pytest"
+            }
+        }
 //         stage('Package code') {
 //             steps {
 //                 sh "zip -r myapp.zip ./* -x '*.git*'"
