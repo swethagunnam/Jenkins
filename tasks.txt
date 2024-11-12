@@ -4,6 +4,7 @@ buy some vegetables
 do some exercises
 meeting with client
 Do lab test!
+for Error
 
 //Jenkins file content
 pipeline {
