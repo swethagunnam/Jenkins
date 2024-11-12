@@ -32,8 +32,8 @@ pipeline {
                         cd /home/ec2-user/app/
                         pip install -r requirements.txt
                         sudo systemctl restart flaskapp.service
-                    '''
-EOF                    
+EOF
+                    '''                  
                 }
             }
         }
