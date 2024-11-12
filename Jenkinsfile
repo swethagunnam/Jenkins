@@ -1,88 +1,41 @@
 pipeline {
     agent any
-    // environment {
-    //     IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
-    //     IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
-    //     KUBECONFIG = credentials('kubeconfig-credentials-id')
 
-    // }
-    parameters {
-        string(name: 'ENVIRONMENT', defaultValue:'dev', description:'Specify the environment for deployment')
-        booleanParam(name:'RUN_TESTS', defaultValue: true, description:'Run Tests in pipeline')
+    environment {
+        SERVER_IP = credentials('prod-server-ip')
     }
-
     stages {
-        //---It occurs by default
-        // stage('Checkout') {
-        //     steps {
-        //         git url: 'https://github.com/swethagunnam/Jenkins.git', branch: 'main'
-        //         sh "ls -ltr"
-        //     }
-        // }
-
         stage('Setup') {
             steps {
-                withCredentials([usernamePassword(credentialsId:'server-creds',
-                usernameVariable:"myuser", passwordVariable:"mypassowrd",)]){
-                    sh '''
-                    echo "My username is ${myuser}
-                    echo "My password id ${mypassword}
-                    '''
-                }
-                sh "pip3 install -r requirements.txt"
+                sh "pip install -r requirements.txt"
             }
         }
         stage('Test') {
-            // when{
-            //     expression {
-            //         params.RUN_TESTS == true
-            //     }
-            // }
             steps {
-                echo "Testing application"
-                // sh "pytest"
-                // sh "whoami"
+                sh "py.test"
             }
         }
-        stage('Deploy') {
-            input {
-                message "Do you want to proceed further"
-                ok "yes"
-            }
+        stage('Package code') {
             steps {
-                echo "Running Deployment"
+                sh "zip -r myapp.zip ./* -x '*.git*'"
+                sh "ls -lart"
             }
         }
-
-        // stage('Login to docker hub') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
-        //         sh 'echo ${dockerhubpwd} | docker login -u sanjeevkt720 --password-stdin'}
-        //         echo 'Login successfully'
-        //     }
-        // }
-        // stage('Build Docker Image')
-        // {
-        //     steps
-        //     {
-        //         sh 'docker build -t ${IMAGE_TAG} .'
-        //         echo "Docker image build successfully"
-        //         sh "docker images"
-        //     }
-        // }
-        // stage('Push Docker Image')
-        // {
-        //     steps
-        //     {
-        //         sh 'docker push ${IMAGE_TAG}'
-        //         echo "Docker image push successfully"
-        //     }
-        // }
-        // stage('Deploy to EKS Cluster') {
-        //     steps {
-        //         sh "kubectl apply -f deployment.yaml"
-        //         echo "Deployed to EKS Cluster"
-        //     }
-        // }
+        stage('Deploy to Prod') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key', keyFileVariable: 'MY_SSH_KEY', usernameVariable: 'username')]) {
+                    sh '''
+                    scp -i $MY_SSH_KEY -o StrictHostKeyChecking=no myapp.zip  ${username}@${SERVER_IP}:/home/ec2-user/
+                    ssh -i $MY_SSH_KEY -o StrictHostKeyChecking=no ${username}@${SERVER_IP} << EOF
+                        unzip -o /home/ec2-user/myapp.zip -d /home/ec2-user/app/
+                        source app/venv/bin/activate
+                        cd /home/ec2-user/app/
+                        pip install -r requirements.txt
+                        sudo systemctl restart flaskapp.service
+                    '''
+EOF                    
+                }
+            }
+        }
     }
 }
