@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo "Hai"
+                echo "testing"
                 sh "pytest"
             }
         }
