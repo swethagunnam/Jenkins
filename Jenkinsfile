@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         SERVER_IP = credentials('prod-server-ip')
+        // Add the directory to the PATH environment variable
+        PATH = "$PATH:/var/lib/jenkins/.local/bin"
     }
     stages {
         stage('Setup') {
@@ -12,10 +14,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                 sh '''
-                    export PATH=$PATH:/var/lib/jenkins/.local/bin
-                    pytest
-                '''
+                sh "pytest"
             }
         }
 //         stage('Package code') {
