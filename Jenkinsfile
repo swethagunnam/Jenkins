@@ -12,8 +12,10 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo "testing"
-                sh "pytest"
+                 sh '''
+                    export PATH=$PATH:/var/lib/jenkins/.local/bin
+                    pytest
+                '''
             }
         }
 //         stage('Package code') {
