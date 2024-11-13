@@ -17,12 +17,12 @@ pipeline {
                 sh "pytest"
             }
         }
-//         stage('Package code') {
-//             steps {
-//                 sh "zip -r myapp.zip ./* -x '*.git*'"
-//                 sh "ls -lart"
-//             }
-//         }
+        stage('Package code') {
+            steps {
+                sh "zip -r myapp.zip ./* -x '*.git*'"
+                sh "ls -lart"
+            }
+        }
 //         stage('Deploy to Prod') {
 //             steps {
 //                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key', keyFileVariable: 'MY_SSH_KEY', usernameVariable: 'username')]) {
